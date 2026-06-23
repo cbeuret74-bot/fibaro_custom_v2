@@ -18,13 +18,14 @@ class FibaroEntity(Entity):
     """Representation of a Fibaro device entity."""
 
     _attr_should_poll = False
+    _attr_has_entity_name = True
 
     def __init__(self, fibaro_device: DeviceModel) -> None:
         """Initialize the device."""
         self.fibaro_device = fibaro_device
         self.controller: FibaroController = fibaro_device.fibaro_controller
         self.ha_id = fibaro_device.ha_id
-        self._attr_name = fibaro_device.friendly_name
+        self._attr_name = None
         self._attr_unique_id = fibaro_device.unique_id_str
 
         self._attr_device_info = self.controller.get_device_info(fibaro_device)
