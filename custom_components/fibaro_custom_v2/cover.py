@@ -45,6 +45,23 @@ class PositionableFibaroCover(FibaroEntity, CoverEntity):
         super().__init__(fibaro_device)
         self.entity_id = ENTITY_ID_FORMAT.format(self.ha_id)
 
+        features = (
+            CoverEntityFeature.OPEN
+            | CoverEntityFeature.CLOSE
+            | CoverEntityFeature.STOP
+            | CoverEntityFeature.SET_POSITION
+        )
+        # Les lamelles n'existent que pour le rôle "VenetianBlinds".
+        # Le FGR224 expose toujours value2/setValue2, donc on ne peut pas
+        # se fier à la présence de value2 -> on gate sur deviceRole.
+        if fibaro_device.properties.get("deviceRole") == "VenetianBlinds":
+            features |= (
+                CoverEntityFeature.OPEN_TILT
+                | CoverEntityFeature.CLOSE_TILT
+                | CoverEntityFeature.SET_TILT_POSITION
+            )
+        self._attr_supported_features = features
+
     @staticmethod
     def bound(position: int | None) -> int | None:
         """Normalize the position."""
