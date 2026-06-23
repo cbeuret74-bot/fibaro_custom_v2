@@ -210,11 +210,14 @@ class FibaroController:
             manufacturer = main_device.properties.get("zwaveCompany")
         else:
             manufacturer = None
+            
+        room_name = self.get_room_name(main_device.room_id)
 
         self._device_infos[main_device.fibaro_id] = DeviceInfo(
             identifiers={(DOMAIN, main_device.fibaro_id)},
             manufacturer=manufacturer,
             name=main_device.name,
+            suggested_area=room_name,
             via_device=(DOMAIN, self.hub_serial),
         )
 
