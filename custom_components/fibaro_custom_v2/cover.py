@@ -78,11 +78,9 @@ class PositionableFibaroCover(FibaroEntity, CoverEntity):
         super().update()
 
         self._attr_current_cover_position = self.bound(self.level)
-        self._attr_current_cover_tilt_position = self.bound(self.level2)
+        if CoverEntityFeature.SET_TILT_POSITION in self._attr_supported_features:
+            self._attr_current_cover_tilt_position = self.bound(self.level2)
 
-        # Be aware that opening and closing is only available for some modern
-        # devices.
-        # For example the Fibaro Roller Shutter 4 reports this correctly.
         device_state = self.fibaro_device.state.str_value(default="").lower()
         self._attr_is_opening = device_state == "opening"
         self._attr_is_closing = device_state == "closing"
