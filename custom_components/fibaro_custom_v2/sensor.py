@@ -187,7 +187,7 @@ class FibaroAdditionalSensor(FibaroEntity, SensorEntity):
         self.entity_id = ENTITY_ID_FORMAT.format(
             f"{self.ha_id}_{entity_description.key}"
         )
-        self._attr_name = f"{fibaro_device.friendly_name} {entity_description.name}"
+        self._attr_name = entity_description.name
         self._attr_unique_id = f"{fibaro_device.unique_id_str}_{entity_description.key}"
 
     def update(self) -> None:
