@@ -41,13 +41,26 @@ def find_master_devices(devices: list[DeviceModel]) -> list[DeviceModel]:
 
 def _get_controller_ids(devices: list[DeviceModel]) -> set[int]:
     controller_ids = {
-        device.fibaro_id for device in devices if device.type in CONTROLLER_TYPES}
+        device.fibaro_id for device in devices if device.type in CONTROLLER_TYPES
+    }
     zwave_controller_id = {
-        device.fibaro_id for device in devices if device.type == ZWAVE_CONTROLLER}
+        device.fibaro_id for device in devices if device.type == ZWAVE_CONTROLLER
+    }
     if len(zwave_controller_id) == 0:
-        # When choosing a user account without admin rights sometimes the controller device
-        # is not visible on the API. In this case we assume it has id = 1.
-        controller_ids.add(1)
+        # Le contrôleur n'est pas visible (compte sans droits admin).
+        # On le DÉDUIT : tout parent référencé mais absent de la liste
+        # des appareils est en réalité le contrôleur caché.
+        device_ids = {device.fibaro_id for device in devices}
+        missing_parents = {
+            device.parent_fibaro_id
+            for device in devices
+            if device.parent_fibaro_id not in device_ids
+            and device.parent_fibaro_id != 0
+        }
+        if missing_parents:
+            controller_ids |= missing_parents
+        else:
+            controller_ids.add(1)  # repli d'origine
     return controller_ids
 
 
