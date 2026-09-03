@@ -1,0 +1,16 @@
+{
+  "domain": "fibaro_custom_v2",
+  "name": "Fibaro Custom V2",
+  "codeowners": [
+    "@cbeuret"
+  ],
+  "config_flow": true,
+  "documentation": "https://github.com/cbeuret74-bot/fibaro_custom_v2",
+  "issue_tracker": "https://github.com/cbeuret74-bot/fibaro_custom_v2/issues",
+  "integration_type": "hub",
+  "iot_class": "local_push",
+  "loggers": [
+    "custom_components.fibaro_custom_v2"
+  ],
+  "version": "2.1.0"
+}
